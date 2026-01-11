@@ -11,13 +11,15 @@ logado = False
 usuario_atual = None
 
 while rodando:
-
+    print('==== Bem vindo ao sistema do banco generico ====')
     if not logado:
         print('\n//// Deseja logar como? ////\n')
         try:
             options = int(input("""
 (1) Logar como usuário
 (2) Logar como Administrador
+(3) Criar uma conta
+(4) Descobrir meu id
 (0) Sair do sistema
             """))
         except ValueError:
@@ -46,6 +48,25 @@ while rodando:
               bank_admin() # supondo que isso gerencie o admin
             else: 
                 print("Senha errada!")
+        
+        elif options == 3:
+            print('Digite os dados:')
+            titular = input("Nome: ")
+            saldo = int(input("Saldo: "))
+            cpf = input("Cpf: ")
+            cursor.execute("""INSERT INTO contas_bancarias
+               (titular, saldo, cpf) VALUES
+               (?,?,?)""",
+                (titular, saldo, cpf))
+            print("Conta criada com sucesso!!")
+            rodando = False
+        elif options == 4:
+            user = input("Digite seu usuário: ")
+            cursor.execute("""SELECT id, titular FROM contas_bancarias WHERE titular = ?""", (user,))
+            users = cursor.fetchall()
+            for user in users:
+                id, titular = user
+                print(f"\n O id da conta {titular} é [{id}]")
         elif options == 0:
             rodando = False
         else:

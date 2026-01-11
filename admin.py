@@ -12,26 +12,13 @@ cursor.execute(""" CREATE TABLE IF NOT EXISTS contas_bancarias (
         """)
 print('==== Bem vindo ao sistema do banco generico ====')
 def bank_admin():
-    action = input('''/ Selecione qual ação vc deseja fazer/ 
+    action = int(input('''/ Selecione qual ação vc deseja fazer/
                
-(1)Adcionar um novo usuario
-(2)Ver todos os usuários
-(3)Ver saldo de algum usuário   
-(4)Deletar um usuário   
-               ''')
-    if action == '1':
-             print('Digite os dados:')
-             titular = input("Nome: ")
-             saldo = int(input("Saldo: "))
-             cpf = input("Cpf: ")
-             cursor.execute("""INSERT INTO contas_bancarias
-               (titular, saldo, cpf) VALUES
-               (?,?,?)""",
-              (titular, saldo, cpf)
-
-)
-             print("Usuário Adcionado com Sucesso")
-    elif action == '2':
+(1)Listar todos os usuários
+(2)Ver saldo de algum usuário   
+(3)Deletar um usuário   
+               '''))
+    if action == 1:
         cursor.execute("SELECT * FROM contas_bancarias")
         dados = cursor.fetchall()
         for conta in dados:
@@ -43,7 +30,7 @@ Saldo: {saldo}
 Cpf: {cpf}
 -------------------   
 """)    
-    elif action == '3':
+    elif action == 2:
         user = input("Digite o usuário: ")
         cursor.execute("""SELECT id, titular, saldo FROM contas_bancarias WHERE titular = ?""", (user,))
         users = cursor.fetchall()
@@ -55,7 +42,7 @@ Titular: {titular}
 Saldo: {saldo}
 -------------------   
 """)
-    elif action == '4':
+    elif action == 3:
          whatid = input("Digite o id do usuário que deseja deletar: ")
          cursor.execute("""DELETE FROM contas_bancarias WHERE id = ?""", (whatid,))
          print("Usuário deletado com sucesso!")
